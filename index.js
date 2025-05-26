@@ -113,22 +113,22 @@ TeamMember.prototype.completeTask = function(taskTitle){
   member.completeTask("Create project");
   
   member.checkProgress()
-    .then(message => console.log(message))
-    .catch(tsk => console.log(tsk)); 
+    .then(msg => console.log(msg))
+    .catch(err => console.log(err)); 
   
   member.completeTask("Create Project");
 
   member.completeTask("Setup");
   
   member.checkProgress()
-    .then(message => console.log(message))
-    .catch(tsk => console.log(tsk)); 
+    .then(msg => console.log(msg))
+    .catch(err => console.log(err)); 
   
   member.completeTask("Write code");
   
   member.checkProgress()
-    .then(message => console.log(message))  
-    .catch(tsk => console.log(tsk));
+    .then(msg => console.log(msg))  
+    .catch(err => console.log(err));
 
 // 3.Build a Candidate class with properties: name, position, and interviews (array of objects with date, status). Add a method scheduleInterview(date) that pushes a new interview with status "pending". Then write an async function sendConfirmation() that returns a Promise that resolves after 1 second with a message "Interview confirmed with [name]", and log the message.
 // pseudocode
@@ -137,7 +137,7 @@ TeamMember.prototype.completeTask = function(taskTitle){
 //         name: string
 //         position: string
 //         interviews: array of objects {date,status},thisi is an empty array
-// 
+
 // Async Method sendConfirmation():
 // Return a Promise that:
 //     Waits for 1 second (simulate delay)
@@ -177,5 +177,73 @@ candidate.scheduleInterview("2025-07-12");
 candidate.sendConfirmation();
 
 //4.Design a Course class with properties: title, instructor, and students (array of student objects with name and progress). Add a method updateProgress(studentName, value) that modifies the student’s progress. Create an async method generateCertificate(studentName) that returns a Promise resolving only if the progress is 100, otherwise reject with "Incomplete progress".
+// pseudocode
+// Class Course:
+//     Properties:
+//         title: string
+//         instructor: string
+//         students: array of students{name(string),progress(string)}
 
+//  Method updateProgress(studentName, value)
+// Find the student in students array by name
+// If student found
+//   Update student's progress with the given value
+
+// Async Method generateCertificate(studentName)
+// Find the student in students array by name
+// If student not found
+//   Reject promise with "Student not found"
+// Else if student's progress is 100
+//   Resolve promise with "Certificate generated for [studentName]"
+// Else
+//   Reject promise with "Incomplete progress"
+
+class Course {
+    constructor(title, instructor, students) {
+      this.title = title;
+      this.instructor = instructor;
+      this.students = students;
+    }
+};
+updateProgress(studentName, value){
+    const student = this.students.find(std => std.name === studentName);
+    if (student){
+        student.progress = value;
+        console.log(`Updatedd progress of ${studentName} to ${value}`)
+    } else {
+        console.log(`Student ${studentName} not found`)
+    }
+}
+async generateCertificate(studentName) {
+    const student = this.students.find(s => s.name === studentName);
+    return new Promise((resolve, reject) => {
+      if (!student) {
+        reject("Student not found");
+      } else if (student.progress === 100) {
+        resolve(`Certificate generated for ${studentName}`);
+      } else {
+        reject("Incomplete progress");
+      }
+    });
+  }
+
+// Example usage:
+const course = new Course("JavaScript", "Eva", [
+  { name: "Wilson", progress: 75 },
+  { name: "Mary", progress: 100 }
+]);
+
+course.updateProgress("Yelena", 100);
+
+course.generateCertificate("Wilson")
+  .then(msg => console.log(msg))
+  .catch(err => console.log(err));
+
+course.generateCertificate("Yelena")
+  .then(msg => console.log(msg))
+  .catch(err => console.log(err));
+
+course.generateCertificate("Mary")
+  .then(msg => console.log(msg))
+  .catch(err => console.log(err));
 //5. Create a StockTracker class with a property watchlist (array of objects with symbol, threshold, currentPrice). Add a method updatePrice(symbol, newPrice) that updates the stock’s current price. Write an async method checkAlerts() that loops through the watchlist and returns a Promise resolving with a list of stocks where currentPrice >= threshold, or rejecting with "No alerts triggered".
