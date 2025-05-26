@@ -227,9 +227,8 @@ async generateCertificate(studentName) {
     });
   }
 
-// Example usage:
 const course = new Course("JavaScript", "Eva", [
-  { name: "Wilson", progress: 75 },
+  { name: "Yelena", progress: 75 },
   { name: "Mary", progress: 100 }
 ]);
 
@@ -247,3 +246,7 @@ course.generateCertificate("Mary")
   .then(msg => console.log(msg))
   .catch(err => console.log(err));
 //5. Create a StockTracker class with a property watchlist (array of objects with symbol, threshold, currentPrice). Add a method updatePrice(symbol, newPrice) that updates the stock’s current price. Write an async method checkAlerts() that loops through the watchlist and returns a Promise resolving with a list of stocks where currentPrice >= threshold, or rejecting with "No alerts triggered".
+// pseudocode
+// Class StockTracker:
+//     Property:
+//         watchlist: array of objects{symbol(string),threshold(number),currentPrice(number)}
