@@ -23,7 +23,7 @@ class CustomerOrder {
     this.status = status;
   }
 
-  calculateTotal() {
+ function calculateTotal() {
     return this.items.reduce((total, item) => {
       return total + item.quantity * item.price;
     }, 0);
@@ -156,7 +156,7 @@ class Candidate {
       this.interviews = [];
     }
   
-    scheduleInterview(date) {
+ function  scheduleInterview(date) {
       this.interviews.push({ date: date, status: "pending" });
     }
   
@@ -205,7 +205,7 @@ class Course {
       this.students = students;
     }
 };
-updateProgress(studentName, value){
+function updateProgress(studentName, value){
     const student = this.students.find(std => std.name === studentName);
     if (student){
         student.progress = value;
@@ -249,4 +249,4 @@ course.generateCertificate("Mary")
 // pseudocode
 // Class StockTracker:
 //     Property:
-//         watchlist: array of objects{symbol(string),threshold(number),currentPrice(number)}
+//         watchlist: array of objects{symbol(string),threshold,currentPrice(number)}
