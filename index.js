@@ -16,6 +16,7 @@
 //         Wait for 2 seconds (simulate payment processing)
 //         Set status to "paid"
 //         Print "Payment successful for order [orderId]"
+
 class CustomerOrder {
   constructor(orderId, items, status = 'pending') {
     this.orderId = orderId;
@@ -23,20 +24,16 @@ class CustomerOrder {
     this.status = status;
   }
 
- function calculateTotal() {
-    return this.items.reduce((total, item) => {
-      return total + item.quantity * item.price;
-    }, 0);
+  calculateTotal() {
+    return this.items.reduce((total, item) => total + item.quantity * item.price, 0);
   }
 
   async processPayment() {
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-
+    await new Promise(resolve => setTimeout(resolve, 2000)); // 2 seconds
     this.status = 'paid';
     console.log(`Payment successful for order ${this.orderId}`);
   }
 }
-
 
 const order = new CustomerOrder('MAME0712', [
   { name: 'Mango', quantity: 5, price: 30 },
@@ -79,21 +76,20 @@ order.processPayment().then(() => {
 //     END IF
 
 class TeamMember {
-    constructor(name, role,tasks) {
-      this.name = name;
-      this.role = role;
-      this.tasks = tasks;
-    }
-};
-  
-TeamMember.prototype.completeTask = function(taskTitle){
-    const task = this.tasks.find(t => t.title === taskTitle)
-    if (task){
-        task.complete = true
-    }
-};
+  constructor(name, role, tasks) {
+    this.name = name;
+    this.role = role;
+    this.tasks = tasks;
+  }
 
-  TeamMember.prototype.checkProgress = function() {
+  completeTask(taskTitle) {
+    const task = this.tasks.find(t => t.title === taskTitle);
+    if (task) {
+      task.completed = true;
+    }
+  }
+
+  checkProgress() {
     return new Promise((resolve, reject) => {
       const allCompleted = this.tasks.every(task => task.completed);
       if (allCompleted) {
@@ -102,8 +98,8 @@ TeamMember.prototype.completeTask = function(taskTitle){
         reject("Pending tasks remaining");
       }
     });
-  };
-  
+  }
+}
   const member = new TeamMember("Winnie", "Developer", [
     { title: "Create project", completed: true },
     { title:"Setup", completed: false},
@@ -130,6 +126,7 @@ TeamMember.prototype.completeTask = function(taskTitle){
     .then(msg => console.log(msg))  
     .catch(err => console.log(err));
 
+
 // 3.Build a Candidate class with properties: name, position, and interviews (array of objects with date, status). Add a method scheduleInterview(date) that pushes a new interview with status "pending". Then write an async function sendConfirmation() that returns a Promise that resolves after 1 second with a message "Interview confirmed with [name]", and log the message.
 // pseudocode
 // Class Candidate:
@@ -149,29 +146,29 @@ TeamMember.prototype.completeTask = function(taskTitle){
 //      date: date
 //      status:'pending'
 // Push the interview object to interviews array
+
 class Candidate {
-    constructor(name, position,interviews) {
-      this.name = name;
-      this.position = position;
-      this.interviews = [];
-    }
-  
- function  scheduleInterview(date) {
-      this.interviews.push({ date: date, status: "pending" });
-    }
-  
-    async sendConfirmation() {
-      return new Promise((resolve) => {
-        setTimeout(() => {
-          const message = `Interview confirmed with ${this.name}`;
-          resolve(message);
-        }, 1000);
-      }).then((message) => {
-        console.log(message);
-        return message;
-      });
-    }
+  constructor(name, position) {
+    this.name = name;
+    this.position = position;
+    this.interviews = [];
   }
+
+  scheduleInterview(date) {
+    this.interviews.push({ date, status: "pending" });
+  }
+
+  async sendConfirmation() {
+    return new Promise(resolve => {
+      setTimeout(() => {
+        const message = `Interview confirmed with ${this.name}`;
+        console.log(message);
+        resolve(message);
+      }, 1000);
+    });
+  }
+}
+
   const candidate = new Candidate("Maines", "Software Developer");
 candidate.scheduleInterview("2025-07-12");
 candidate.sendConfirmation();
@@ -198,23 +195,25 @@ candidate.sendConfirmation();
 // Else
 //   Reject promise with "Incomplete progress"
 
+
 class Course {
-    constructor(title, instructor, students) {
-      this.title = title;
-      this.instructor = instructor;
-      this.students = students;
-    }
-};
-function updateProgress(studentName, value){
+  constructor(title, instructor, students) {
+    this.title = title;
+    this.instructor = instructor;
+    this.students = students;
+  }
+
+  updateProgress(studentName, value) {
     const student = this.students.find(std => std.name === studentName);
-    if (student){
-        student.progress = value;
-        console.log(`Updatedd progress of ${studentName} to ${value}`)
+    if (student) {
+      student.progress = value;
+      console.log(`Updated progress of ${studentName} to ${value}`);
     } else {
-        console.log(`Student ${studentName} not found`)
+      console.log(`Student ${studentName} not found`);
     }
-}
-async generateCertificate(studentName) {
+  }
+
+  async generateCertificate(studentName) {
     const student = this.students.find(s => s.name === studentName);
     return new Promise((resolve, reject) => {
       if (!student) {
@@ -226,7 +225,7 @@ async generateCertificate(studentName) {
       }
     });
   }
-
+}
 const course = new Course("JavaScript", "Eva", [
   { name: "Yelena", progress: 75 },
   { name: "Mary", progress: 100 }
@@ -245,8 +244,76 @@ course.generateCertificate("Yelena")
 course.generateCertificate("Mary")
   .then(msg => console.log(msg))
   .catch(err => console.log(err));
+
+
 //5. Create a StockTracker class with a property watchlist (array of objects with symbol, threshold, currentPrice). Add a method updatePrice(symbol, newPrice) that updates the stock’s current price. Write an async method checkAlerts() that loops through the watchlist and returns a Promise resolving with a list of stocks where currentPrice >= threshold, or rejecting with "No alerts triggered".
 // pseudocode
 // Class StockTracker:
-//     Property:
-//         watchlist: array of objects{symbol(string),threshold,currentPrice(number)}
+//     Property: watchlist = array of stock objects {symbol, threshold, currentPrice}
+
+//     Method updatePrice(symbol, newPrice):
+//         For each stock in watchlist:
+//             If stock.symbol == symbol:
+//                 stock.currentPrice = newPrice
+//                 Return
+//         # If symbol not found, optionally add new stock or ignore
+
+//     Async Method checkAlerts():
+//         Initialize alerts = []
+//         For each stock in watchlist:
+//             If stock.currentPrice >= stock.threshold:
+//                 Add stock to alerts
+//         If alerts is not empty:
+//             Resolve Promise with alerts
+//         Else:
+//             Reject Promise with "No alerts triggered"
+
+
+class StockTracker {
+  constructor() {
+    this.watchlist = []; 
+  }
+
+
+  addStock(symbol, threshold, currentPrice = 0) {
+    this.watchlist.push({ symbol, threshold, currentPrice });
+  }
+
+
+  updatePrice(symbol, newPrice) {
+    const stock = this.watchlist.find(s => s.symbol === symbol);
+    if (stock) {
+      stock.currentPrice = newPrice;
+    }
+
+  }
+
+
+  async checkAlerts() {
+    return new Promise((resolve, reject) => {
+      const alerts = this.watchlist.filter(
+        stock => stock.currentPrice >= stock.threshold
+      );
+      if (alerts.length > 0) {
+        resolve(alerts);
+      } else {
+        reject("No alerts triggered");
+      }
+    });
+  }
+}
+
+const tracker = new StockTracker();
+tracker.addStock('$', 350, 160);
+tracker.addStock('€', 3500, 2400);
+
+tracker.updatePrice("$", 365);
+
+tracker.checkAlerts()
+  .then(alerts => {
+    console.log("Alerts:", alerts);
+  })
+  .catch(err => {
+    console.log(err);
+  });
+
